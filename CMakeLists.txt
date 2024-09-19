@@ -52,7 +52,7 @@ add_subdirectory(third_party)
 add_subdirectory(umd)
 add_subdirectory(validation)
 
-include(cmake/packaging/setup.cmake)
+#include(cmake/packaging/setup.cmake)
 
 # You may your custom commands in .local.cmake, i.e. driver compilation, running tests.
 include(${CMAKE_CURRENT_SOURCE_DIR}/.local.cmake OPTIONAL)
