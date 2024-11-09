@@ -669,9 +669,11 @@ getCommandUpdates(const void *pNext,
                   CommandUpdatesMap &updatesMap) {
     const ze_structure_type_graph_ext_t stype =
         *reinterpret_cast<const ze_structure_type_graph_ext_t *>(pNext);
+    const ze_structure_type_t stype_proper =
+        *reinterpret_cast<const ze_structure_type_t *>(pNext);
 
-    switch (stype) {
-    case ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC: {
+    if (stype == ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC_DEPRECATED ||
+        stype_proper == ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC) {
         const ze_mutable_graph_argument_exp_desc_t *desc =
             reinterpret_cast<const ze_mutable_graph_argument_exp_desc_t *>(pNext);
         uint64_t commandId = desc->commandId;
@@ -692,13 +694,11 @@ getCommandUpdates(const void *pNext,
         LOG(CMDLIST, "Mutate GraphArgument[%u] = %p", argIndex, desc->pArgValue);
 
         return desc->pNext;
-    }
-    default: {
+    } else {
         LOG_E("Unsupported descriptor type (%#x) to mutate commands. Only "
               "ZE_STRUCTURE_TYPE_MUTABLE_GRAPH_ARGUMENT_EXP_DESC is supported",
               stype);
         return {};
-    }
     }
 }
 
