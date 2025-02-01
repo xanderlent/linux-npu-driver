@@ -11,7 +11,7 @@
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 find_package(LevelZero)
-if(NOT LevelZero_FOUND)
+if(NOT LevelZero_FOUND AND NOT USE_SYSTEM_LIBRARIES)
   message(STATUS "LevelZero not found in the system, take one from third_party/level_zero")
 
   # EXCLUDE_FROM_ALL is used because level-zero-devel install destination starts with root
@@ -23,6 +23,8 @@ if(NOT LevelZero_FOUND)
           COMPONENT level-zero)
 
   set(LevelZero_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/level-zero/include)
+elseif(NOT LevelZero_FOUND AND USE_SYSTEM_LIBRARIES)
+  message(FATAL_ERROR "LevelZero was not found on the system and USE_SYSTEM_LIBRARIES was requested.")
 else()
   set(LevelZero_INCLUDE_DIR ${LevelZero_INCLUDE_DIR}/level_zero)
 endif()
